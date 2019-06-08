@@ -1,0 +1,21 @@
+{
+  "name": "cynobit/axe-ci",
+  "type": "library",
+  "description": "A Translator for the AXE Scripting Language used for Data Extractiong from strings.",
+  "tags": ["paystack", "money", "kobo"],
+  "page": "https://github.com/cynobit/axe-ci",
+  "authors": [
+    {
+      "name": "Francis Ilechukwu",
+      "email": "francis94c@gmail.com",
+      "page": "about.me/francisilechukwu",
+      "role": "Developer"
+    }
+  ],
+  "php": ">=5.3.0",
+  "autoload": {
+    "libraries" : [
+      ["Axe", "@axe_config", "axe"]
+    ]
+  }
+}
