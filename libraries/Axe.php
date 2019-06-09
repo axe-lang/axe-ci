@@ -33,7 +33,7 @@ class Axe {
   function run($path, $raw_data, &$extractions=[]) {
     $this->buffer = $this->raw = $raw_data;
     $script = file_get_contents($path);
-    $script = preg_replace("/#( )*[\w ]+/", "{@@@@}", $script); // Mark Comments.
+    $script = preg_replace("/^(#( )*[\w \d]+)/m", "{@@@@}", $script); // Mark Comments.
     $script = preg_split("/(\r\n|\n|\r)/", $script); // Prepare to Split.
     $line_number = 1;
     foreach($script as $line) {
@@ -48,14 +48,18 @@ class Axe {
             case "verify":
               if ($this->verify_fail_silent) break;
               return self::VERIFY_FAIL . ":" . $line_number . ":" . $line;
+            default:
+              return "N:" . $line_number . ":" . $line;
           }
         }
       } else {
-        throw new Exception("Syntax Error at Line: $line_number, Unknown Function Call");
+        throw new Exception("Syntax Error at Line: $line_number, Unknown Function Call: $line");
       }
       ++$line_number;
     }
     $extractions = $this->output;
+    $this->raw = "";
+    $this->buffer = "";
     return 0;
   }
   /**
@@ -83,7 +87,7 @@ class Axe {
    * @param  [type] $exp [description]
    * @return [type]      [description]
    */
-  private function verify($exp) {
+  private function verify($exp) {    
     preg_match("/$exp/", $this->buffer, $match);
     return count($match) > 0 && strlen($match[0]) == strlen($this->buffer);
   }
@@ -94,8 +98,11 @@ class Axe {
    */
   private function carve($exp) {
     preg_match("/$exp/", $this->buffer, $match);
-    $this->buffer = $match[0];
-    return true;
+    if ($match != null && count($match) > 0) {
+      $this->buffer = $match[0];
+      return true;
+    }
+    return false;
   }
   /**
    * [axe description]
