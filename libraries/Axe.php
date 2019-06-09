@@ -3,14 +3,25 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Axe {
 
-  private $buffer = "";
+  private $buffer             = "";
 
-  private $raw;
+  private $raw                = "";
 
-  private $output = [];
+  private $output             = [];
 
-  function __construct() {
+  private $check_fail_silent  = false;
 
+  private $verify_fail_silent = false;
+
+  const   CHECK_FAIL          = 1;
+
+  const   VERIFY_FAIL         = 2;
+
+  function __construct($params=null) {
+    if ($params != null) {
+      if (isset($params["check_fail_silent"])) $this->fail_silent = $params["check_fail_silent"];
+      if (isset($params["verify_fail_silent"])) $this->fail_silent = $params["verify_fail_silent"];
+    }
   }
   /**
    * [run description]
@@ -29,13 +40,23 @@ class Axe {
       if ($line == "" || $line == "{@@@@}") {++$line_number; continue;}
       preg_match("/[\w]+/", $line, $command);
       if (method_exists($this, $command[0])) {
-        call_user_func([$this, strtolower($command[0])], $this->get_expression($command[0], $line));
+        if (!call_user_func([$this, strtolower($command[0])], $this->get_expression($command[0], $line))) {
+          switch (strtolower($command[0])) {
+            case "check":
+              if ($this->check_fail_silent) break;
+              return self::CHECK_FAIL . ":" . $line_number . ":" . $line;
+            case "verify":
+              if ($this->verify_fail_silent) break;
+              return self::VERIFY_FAIL . ":" . $line_number . ":" . $line;
+          }
+        }
       } else {
-        throw new Exception("Syntax Error at Line: $line_number");
+        throw new Exception("Syntax Error at Line: $line_number, Unknown Function Call");
       }
       ++$line_number;
     }
     $extractions = $this->output;
+    return 0;
   }
   /**
    * [get_expression description]
@@ -49,6 +70,24 @@ class Axe {
     return preg_replace("/(\"\))$/", "", $exp);
   }
   /**
+   * [check description]
+   * @param  [type] $exp [description]
+   * @return [type]      [description]
+   */
+  private function check($exp) {
+    preg_match("/$exp/", $this->buffer, $match);
+    return count($match) > 0;
+  }
+  /**
+   * [verify description]
+   * @param  [type] $exp [description]
+   * @return [type]      [description]
+   */
+  private function verify($exp) {
+    preg_match("/$exp/", $this->buffer, $match);
+    return count($match) > 0 && strlen($match[0]) == strlen($this->buffer);
+  }
+  /**
    * [carve description]
    * @param  [type] $exp [description]
    * @return [type]      [description]
@@ -56,6 +95,7 @@ class Axe {
   private function carve($exp) {
     preg_match("/$exp/", $this->buffer, $match);
     $this->buffer = $match[0];
+    return true;
   }
   /**
    * [axe description]
@@ -64,6 +104,7 @@ class Axe {
    */
   private function axe($exp) {
     $this->buffer = preg_replace("/$exp/", "", $this->buffer);
+    return true;
   }
   /**
    * [put description]
@@ -73,6 +114,7 @@ class Axe {
   private function pack($exp) {
     $this->output[$exp] = $this->buffer;
     $this->buffer = $this->raw;
+    return true;
   }
 }
 ?>
