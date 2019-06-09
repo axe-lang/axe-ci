@@ -28,18 +28,10 @@ class Axe {
     foreach($script as $line) {
       if ($line == "" || $line == "{@@@@}") {++$line_number; continue;}
       preg_match("/[\w]+/", $line, $command);
-      switch($command[0]) {
-        case "CARVE":
-          $this->carve($this->get_expression("CARVE", $line));
-          break;
-        case "AXE":
-          $this->axe($this->get_expression("AXE", $line));
-          break;
-        case "PUT":
-          $this->put($this->get_expression("PUT", $line));
-          break;
-        default:
-          throw new Exception("Syntax Error at Line: $line_number");
+      if (method_exists($this, $command[0])) {
+        call_user_func([$this, strtolower($command[0])], $this->get_expression($command[0], $line));
+      } else {
+        throw new Exception("Syntax Error at Line: $line_number");
       }
       ++$line_number;
     }
@@ -53,6 +45,7 @@ class Axe {
    */
   private function get_expression($function, $line) {
     $exp = preg_replace("/$function\(\"/", "", $line);
+    $exp = trim($exp);
     return preg_replace("/(\"\))$/", "", $exp);
   }
   /**
@@ -77,7 +70,7 @@ class Axe {
    * @param  [type] $exp [description]
    * @return [type]      [description]
    */
-  private function put($exp) {
+  private function pack($exp) {
     $this->output[$exp] = $this->buffer;
     $this->buffer = $this->raw;
   }
