@@ -9,9 +9,9 @@ class Axe {
 
   private $output             = [];
 
-  private $check_fail_silent  = false;
+  private $check_fail_silent;
 
-  private $verify_fail_silent = false;
+  private $verify_fail_silent;
 
   const   CHECK_FAIL          = 1;
 
@@ -19,8 +19,8 @@ class Axe {
 
   function __construct($params=null) {
     if ($params != null) {
-      if (isset($params["check_fail_silent"])) $this->fail_silent = $params["check_fail_silent"];
-      if (isset($params["verify_fail_silent"])) $this->fail_silent = $params["verify_fail_silent"];
+      $this->check_fail_silent = $params['check_fail_silent'] ?? false;
+      $this->verify_fail_silent = $params['verify_fail_silent'] ?? false;
     }
   }
   /**
