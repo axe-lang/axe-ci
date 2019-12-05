@@ -21,13 +21,14 @@ class Axe {
   }
   /**
    * [run description]
+   * @date   2019-07-05
    * @param  string    $path        AXE Script File Path
    * @param  array     $raw_data    [description]
    * @param  array     $extractions [description]
    * @throws Exception
    * @return int       Exit Code.
    */
-  function run($path, $raw_data, &$extractions=[])
+  function run($path, $raw_data, &$extractions=[]):int
   {
     $this->buffer = $this->raw = $raw_data;
     $script = file_get_contents($path);
@@ -47,6 +48,7 @@ class Axe {
               if ($this->verify_fail_silent) break;
               throw new Exception("VERIFY FAIL on Line $line_number: '$line'");
             default:
+              // TODO: Confirm that this below is really un necessary.
               throw new Exception("Unknown Validator on Line $line_number: '$line'");
           }
         }
@@ -84,10 +86,11 @@ class Axe {
   }
   /**
    * [verify description]
-   * @param  [type] $exp [description]
-   * @return [type]      [description]
+   * @date   2019-07-05
+   * @param  [type]     $exp [description]
+   * @return bool            [description]
    */
-  private function verify($exp)
+  private function verify($exp):bool
   {
     preg_match("/$exp/", $this->buffer, $match);
     return count($match) > 0 && strlen($match[0]) == strlen($this->buffer);
@@ -120,10 +123,11 @@ class Axe {
   }
   /**
    * [put description]
+   * @date   2019-07-05
    * @param  [type] $exp [description]
    * @return [type]      [description]
    */
-  private function pack($exp)
+  private function pack($exp):bool
   {
     $this->output[$exp] = $this->buffer;
     $this->buffer = $this->raw;
