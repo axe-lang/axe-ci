@@ -25,12 +25,13 @@ class Axe {
   }
   /**
    * [run description]
-   * @param  [type] $path        [description]
+   * @param  [type] $path        AXE Script File Path
    * @param  [type] $raw_data    [description]
    * @param  array  $extractions [description]
    * @return [type]              [description]
    */
-  function run($path, $raw_data, &$extractions=[]) {
+  function run($path, $raw_data, &$extractions=[])
+  {
     $this->buffer = $this->raw = $raw_data;
     $script = file_get_contents($path);
     $script = preg_replace("/^(#( )*[\w \d]+)/m", "{@@@@}", $script); // Mark Comments.
@@ -68,7 +69,8 @@ class Axe {
    * @param  [type] $line     [description]
    * @return [type]           [description]
    */
-  private function get_expression($function, $line) {
+  private function get_expression($function, $line)
+  {
     $exp = preg_replace("/$function\(\"/", "", $line);
     $exp = trim($exp);
     return preg_replace("/(\"\))$/", "", $exp);
@@ -78,7 +80,8 @@ class Axe {
    * @param  [type] $exp [description]
    * @return [type]      [description]
    */
-  private function check($exp) {
+  private function check($exp)
+  {
     preg_match("/$exp/", $this->buffer, $match);
     return count($match) > 0;
   }
@@ -87,7 +90,8 @@ class Axe {
    * @param  [type] $exp [description]
    * @return [type]      [description]
    */
-  private function verify($exp) {    
+  private function verify($exp)
+  {
     preg_match("/$exp/", $this->buffer, $match);
     return count($match) > 0 && strlen($match[0]) == strlen($this->buffer);
   }
@@ -96,12 +100,15 @@ class Axe {
    * @param  [type] $exp [description]
    * @return [type]      [description]
    */
-  private function carve($exp) {
+  private function carve($exp)
+  {
     preg_match("/$exp/", $this->buffer, $match);
+
     if ($match != null && count($match) > 0) {
       $this->buffer = $match[0];
       return true;
     }
+
     return false;
   }
   /**
@@ -109,7 +116,8 @@ class Axe {
    * @param  [type] $exp [description]
    * @return [type]      [description]
    */
-  private function axe($exp) {
+  private function axe($exp)
+  {
     $this->buffer = preg_replace("/$exp/", "", $this->buffer);
     return true;
   }
@@ -118,7 +126,8 @@ class Axe {
    * @param  [type] $exp [description]
    * @return [type]      [description]
    */
-  private function pack($exp) {
+  private function pack($exp)
+  {
     $this->output[$exp] = $this->buffer;
     $this->buffer = $this->raw;
     return true;
