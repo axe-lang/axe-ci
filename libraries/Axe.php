@@ -13,10 +13,6 @@ class Axe {
 
   private $verify_fail_silent;
 
-  const   CHECK_FAIL          = 1;
-
-  const   VERIFY_FAIL         = 2;
-
   function __construct($params=null) {
     if ($params != null) {
       $this->check_fail_silent = $params['check_fail_silent'] ?? false;
@@ -25,10 +21,11 @@ class Axe {
   }
   /**
    * [run description]
-   * @param  [type] $path        AXE Script File Path
-   * @param  [type] $raw_data    [description]
-   * @param  array  $extractions [description]
-   * @return [type]              [description]
+   * @param  string    $path        AXE Script File Path
+   * @param  array     $raw_data    [description]
+   * @param  array     $extractions [description]
+   * @throws Exception
+   * @return int       Exit Code.
    */
   function run($path, $raw_data, &$extractions=[])
   {
@@ -45,12 +42,12 @@ class Axe {
           switch (strtolower($command[0])) {
             case "check":
               if ($this->check_fail_silent) break;
-              return self::CHECK_FAIL . ":" . $line_number . ":" . $line;
+              throw new Exception("CHECK FAIL on Line $line_number: '$line'");
             case "verify":
               if ($this->verify_fail_silent) break;
-              return self::VERIFY_FAIL . ":" . $line_number . ":" . $line;
+              throw new Exception("VERIFY FAIL on Line $line_number: '$line'");
             default:
-              return "N:" . $line_number . ":" . $line;
+              throw new Exception("Unknown Validator on Line $line_number: '$line'");
           }
         }
       } else {
