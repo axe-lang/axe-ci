@@ -1,22 +1,44 @@
+
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Axe {
-
+  /**
+   * [private description]
+   * @var [type]
+   */
   private $buffer             = "";
-
+  /**
+   * [private description]
+   * @var [type]
+   */
   private $raw                = "";
-
+  /**
+   * [private description]
+   * @var [type]
+   */
   private $output             = [];
-
+  /**
+   * [private description]
+   * @var [type]
+   */
   private $check_fail_silent;
-
+  /**
+   * [private description]
+   * @var [type]
+   */
   private $verify_fail_silent;
+  /**
+   * [private description]
+   * @var [type]
+   */
+  private $carve_fail_silent;
 
   function __construct($params=null) {
     if ($params != null) {
       $this->check_fail_silent = $params['check_fail_silent'] ?? false;
       $this->verify_fail_silent = $params['verify_fail_silent'] ?? false;
+      $this->carve_fail_silent = $params['carve_fail_silent'] ?? false;
     }
   }
   /**
@@ -28,7 +50,7 @@ class Axe {
    * @throws Exception
    * @return int       Exit Code.
    */
-  function run($path, $raw_data, &$extractions=[]):int
+  function run(string $path, string $raw_data, &$extractions=[]):int
   {
     $this->buffer = $this->raw = $raw_data;
     $script = file_get_contents($path);
@@ -41,15 +63,17 @@ class Axe {
       if (method_exists($this, $command[0])) {
         if (!call_user_func([$this, strtolower($command[0])], $this->get_expression($command[0], $line))) {
           switch (strtolower($command[0])) {
-            case "check":
+            case 'check':
               if ($this->check_fail_silent) break;
-              throw new Exception("CHECK FAIL on Line $line_number: '$line'");
-            case "verify":
+              throw new Exception("CHECK FAILED on Line $line_number: '$line'");
+            case 'verify':
               if ($this->verify_fail_silent) break;
-              throw new Exception("VERIFY FAIL on Line $line_number: '$line'");
+              throw new Exception("VERIFY FAILED on Line $line_number: '$line'");
+            case 'carve':
+              if ($this->carve_fail_silent) break;
+              throw new Exception("CARVE FAILED on Line $line_number: '$line'");
             default:
-              // TODO: Confirm that this below is really un necessary.
-              throw new Exception("Unknown Validator on Line $line_number: '$line'");
+              throw new Exception("Unknown Function Call on Line $line_number: '$line'");
           }
         }
       } else {
