@@ -7,17 +7,17 @@ class Axe {
    * [private description]
    * @var [type]
    */
-  private $buffer             = "";
+  private $buffer = "";
   /**
    * [private description]
    * @var [type]
    */
-  private $raw                = "";
+  private $raw = "";
   /**
    * [private description]
    * @var [type]
    */
-  private $output             = [];
+  private $output;
   /**
    * [private description]
    * @var [type]
@@ -35,6 +35,7 @@ class Axe {
   private $carve_fail_silent;
 
   function __construct($params=null) {
+    $this->output = new stdClass();
     if ($params != null) {
       $this->check_fail_silent = $params['check_fail_silent'] ?? false;
       $this->verify_fail_silent = $params['verify_fail_silent'] ?? false;
@@ -153,7 +154,7 @@ class Axe {
    */
   private function pack($exp):bool
   {
-    $this->output[$exp] = $this->buffer;
+    $this->output->$exp = $this->buffer;
     $this->buffer = $this->raw;
     return true;
   }
