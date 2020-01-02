@@ -24,13 +24,13 @@ var_dump($data);
 ### AXE Script ###
 The Language of the AXE Script is quite easy, not too complex, and consists mainly of the function calls below.
 
-| Function                                      | Description                                             |
-| --------------------------------------------- | --------------------------------------------------------|
-| `AXE`                                         | The function that gave the language its name, I takes 1 argument which is a RegEx pattern describing what should be removed/eliminated from the current pool of text.|
-| `CARVE`                                       | This function takes 1 argument which is a RegEx pattern to match in the pool of string/current text buffer and discard the rest. |
-| `VERIFY`                                      | This function takes 1 argument which is a RegEx pattern and verifies that the __WHOLE__ current value of the text buffer, matches the given pattern. This function will throw an exception if it fails, i.e If the pattern do not match. |
-| `CHECK`                                       | This function takes 1 argument which is a RegEx pattern and checks that given pattaern can find at least a match in the current text buffer. This function will throw an exception if it fails, i.e If the pattern do not match. |
-| `PACK`                                        | This function takes 1 argument, which is the key or field name to assign the value of the current text buffer to in its resulting object, __A call to this function resets the text buffer__ so you can `CARVE` or `AXE` something else in order to extract (call `PACK` again). |
+| Function &nbsp; &nbsp; &nbsp; | Description                                             |
+| ------------------------------| --------------------------------------------------------|
+| `AXE`                         | The function that gave the language its name, I takes 1 argument which is a RegEx pattern describing what should be removed/eliminated from the current pool of text.|
+| `CARVE`                       | This function takes 1 argument which is a RegEx pattern to match in the pool of string/current text buffer and discard the rest. |
+| `VERIFY`                      | This function takes 1 argument which is a RegEx pattern and verifies that the __WHOLE__ current value of the text buffer, matches the given pattern. This function will throw an exception if it fails, i.e If the pattern do not match. |
+| `CHECK`                       | This function takes 1 argument which is a RegEx pattern and checks that given pattaern can find at least a match in the current text buffer. This function will throw an exception if it fails, i.e If the pattern do not match. |
+| `PACK`                        | This function takes 1 argument, which is the key or field name to assign the value of the current text buffer to in its resulting object, __A call to this function resets the text buffer__ so you can `CARVE` or `AXE` something else in order to extract (call `PACK` again). |
 
 AXE Scripts are generally a means to an end, which is to process pools of text as many times as possible, and extract information from them into a key value pair variable. In PHP, you'll end up with an `stdClass` object whose fields are the ones you choose to extract.
 
