@@ -24,7 +24,7 @@ var_dump($data);
 ### AXE Script ###
 The Language of the AXE Script is quite easy, not too complex, and consists mainly of the function calls below.
 
-| Function &nbsp; &nbsp; &nbsp; | Description                                             |
+| Function &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; | Description                                             |
 | ------------------------------| --------------------------------------------------------|
 | `AXE`                         | The function that gave the language its name, I takes 1 argument which is a RegEx pattern describing what should be removed/eliminated from the current pool of text.|
 | `CARVE`                       | This function takes 1 argument which is a RegEx pattern to match in the pool of string/current text buffer and discard the rest. |
