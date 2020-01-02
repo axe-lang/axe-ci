@@ -95,9 +95,9 @@ class Axe {
    */
   private function get_expression($function, $line)
   {
-    $exp = preg_replace("/$function\(\"/", "", $line);
+    $exp = preg_replace("/$function( |)\((\"(\/|)|'(\/|))/", "", $line);
     $exp = trim($exp);
-    return preg_replace("/(\"\))$/", "", $exp);
+    return preg_replace("/((\/|)\"|(\/|)')\)$/", "", $exp);
   }
   /**
    * [check description]
