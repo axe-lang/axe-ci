@@ -54,11 +54,11 @@ And you want to Extract Mathematics and Geography. You could use the AXE script 
 CHECK("Mathematics:[A-F]{1}[1-9]?")
 CHECK("Geography:[A-F]{1}[1-9]?:")
 
-CARVE("Mathematics:[A-F]{1}[1-9]?");
+CARVE("Mathematics:[A-F]{1}[1-9]?")
 AXE("Mathematics");
 PACK("mathematics");
 
-CARVE("Geography:[A-F]{1}[1-9]?");
+CARVE("Geography:[A-F]{1}[1-9]?")
 AXE("Geography");
 PACK("geography")
 ```
