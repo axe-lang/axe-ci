@@ -1,4 +1,7 @@
 # axe-ci
+
+<p align="center"><img src="https://res.cloudinary.com/francis94c/image/upload/c_scale,w_150/v1578014137/AXE_small.png"></p>
+
 AXE Scripting Language Translator for Code Igniter (Splint).
 
 AXE is a scripting language used to easily extract information from a large pool
@@ -51,15 +54,15 @@ Economics: B2
 And you want to Extract Mathematics and Geography. You could use the AXE script below
 
 ```axe
-CHECK("Mathematics:[A-F]{1}[1-9]?")
-CHECK("Geography:[A-F]{1}[1-9]?:")
+CHECK("/Mathematics:[A-F]{1}[1-9]?/")
+CHECK("/Geography:[A-F]{1}[1-9]?:/")
 
-CARVE("Mathematics:[A-F]{1}[1-9]?")
-AXE("Mathematics");
+CARVE("/Mathematics:[A-F]{1}[1-9]?/")
+AXE("/Mathematics/");
 PACK("mathematics");
 
-CARVE("Geography:[A-F]{1}[1-9]?")
-AXE("Geography");
+CARVE("/Geography:[A-F]{1}[1-9]?/")
+AXE("/Geography/");
 PACK("geography")
 ```
 
