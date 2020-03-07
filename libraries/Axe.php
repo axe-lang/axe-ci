@@ -107,7 +107,7 @@ class Axe {
   private function check($exp)
   {
     preg_match("/$exp/", $this->buffer, $match);
-    return count($match) > 0;
+    return count($match ?? []) > 0;
   }
   /**
    * [verify description]
@@ -118,7 +118,7 @@ class Axe {
   private function verify($exp):bool
   {
     preg_match("/$exp/", $this->buffer, $match);
-    return count($match) > 0 && strlen($match[0]) == strlen($this->buffer);
+    return count($match ?? []) > 0 && strlen($match[0]) == strlen($this->buffer);
   }
   /**
    * [carve description]
@@ -129,7 +129,7 @@ class Axe {
   {
     preg_match("/$exp/", $this->buffer, $match);
 
-    if ($match != null && count($match) > 0) {
+    if (count($match ?? []) > 0) {
       $this->buffer = $match[0];
       return true;
     }
