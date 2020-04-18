@@ -2,39 +2,46 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Axe {
+class Axe
+{
   /**
    * [private description]
    * @var [type]
    */
   private $buffer = "";
+
   /**
    * [private description]
    * @var [type]
    */
   private $raw = "";
+
   /**
    * [private description]
    * @var [type]
    */
   private $output;
+
   /**
    * [private description]
    * @var [type]
    */
   private $check_fail_silent;
+
   /**
    * [private description]
    * @var [type]
    */
   private $verify_fail_silent;
+
   /**
    * [private description]
    * @var [type]
    */
   private $carve_fail_silent;
 
-  function __construct($params=null) {
+  function __construct($params=null)
+  {
     $this->output = new stdClass();
     if ($params != null) {
       $this->check_fail_silent = $params['check_fail_silent'] ?? false;
@@ -159,4 +166,3 @@ class Axe {
     return true;
   }
 }
-?>
